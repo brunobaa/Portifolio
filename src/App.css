@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
