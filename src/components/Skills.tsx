@@ -1,30 +1,40 @@
-import './Skills.css';
+import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaDatabase } from "react-icons/fa";
+import { SiTypescript, SiMongodb, SiTailwindcss, SiUnity, SiC, SiCplusplus, SiPython, SiVite, SiGithub } from "react-icons/si";
+import "./Skills.css";
 
-function Skills() {
-  const skills = {
-    "Desenvolvimento Web": ['HTML', 'CSS', 'Tailwind CSS', 'React', 'Vite', 'TypeScript', 'Node.js'],
-    "Programação": ['JavaScript', 'Java', 'C', 'C++', 'Python'],
-    "Banco de Dados": ['SQL', 'MongoDB'],
-    "Ferramentas & Versionamento": ['GitHub', 'Unity']
-  };
+const skills = [
+  { name: "React", icon: <FaReact className="skill-icon" /> },
+  { name: "Node.js", icon: <FaNodeJs className="skill-icon" /> },
+  { name: "HTML", icon: <FaHtml5 className="skill-icon" /> },
+  { name: "CSS", icon: <FaCss3Alt className="skill-icon" /> },
+  { name: "JavaScript", icon: <FaJs className="skill-icon" /> },
+  { name: "TypeScript", icon: <SiTypescript className="skill-icon" /> },
+  { name: "Git", icon: <FaGitAlt className="skill-icon" /> },
+  { name: "GitHub", icon: <SiGithub className="skill-icon" /> },
+  { name: "SQL", icon: <FaDatabase className="skill-icon" /> },
+  { name: "MongoDB", icon: <SiMongodb className="skill-icon" /> },
+  { name: "Tailwind CSS", icon: <SiTailwindcss className="skill-icon" /> },
+  { name: "Unity", icon: <SiUnity className="skill-icon" /> },
+  { name: "C", icon: <SiC className="skill-icon" /> },
+  { name: "C++", icon: <SiCplusplus className="skill-icon" /> },
+  { name: "Python", icon: <SiPython className="skill-icon" /> },
+  { name: "Vite", icon: <SiVite className="skill-icon" /> },
+];
 
+const Skills = () => {
   return (
     <section id="skills" className="skills-section">
-      <h2>Habilidades Técnicas</h2>
+      <h2>Habilidades e Tecnologias</h2>
       <div className="skills-container">
-        {Object.entries(skills).map(([category, skillList], index) => (
-          <div key={index} className="skill-category">
-            <h3>{category}</h3>
-            <div className="skill-badges">
-              {skillList.map((skill, idx) => (
-                <span key={idx} className="skill-badge">{skill}</span>
-              ))}
-            </div>
+        {skills.map((skill, index) => (
+          <div key={index} className="skill-card">
+            {skill.icon}
+            <p>{skill.name}</p>
           </div>
         ))}
       </div>
     </section>
   );
-}
+};
 
 export default Skills;

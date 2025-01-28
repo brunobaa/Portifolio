@@ -1,0 +1,27 @@
+.astro-container {
+    text-align: center;
+    color: #00ffff;
+    font-family: 'Courier New', monospace;
+  }
+  
+  canvas {
+    border: 2px solid #00ff00;
+    background-color: black;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .start-btn {
+    background-color: #00ff00;
+    color: black;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .start-btn:hover {
+    background-color: #008000;
+  }
+  

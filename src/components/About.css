@@ -9,25 +9,26 @@
     background: #1a1d2e;
     color: white;
     box-sizing: border-box;
+    overflow: hidden;
   }
   
   .about-container {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 2.5rem;
     max-width: 1000px;
     width: 90%;
   }
   
-  /* Foto do Usuário */
+  /* Foto do Usuário (Aumentada e Animação Rápida) */
   .about-image {
-    width: 220px;
-    height: 220px;
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
     overflow: hidden;
     border: 4px solid #00aaff;
-    box-shadow: 0 0 15px rgba(0, 170, 255, 0.6);
-    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.6);
+    animation: pulse-neon 1s infinite alternate; /* Tempo da animação reduzido */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,9 +41,14 @@
     object-position: center;
   }
   
-  .about-image:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 25px rgba(0, 170, 255, 0.8);
+  /* Animação de brilho pulsante (Agora mais rápida) */
+  @keyframes pulse-neon {
+    0% {
+      box-shadow: 0 0 15px rgba(0, 170, 255, 0.6);
+    }
+    100% {
+      box-shadow: 0 0 30px rgba(0, 170, 255, 0.8);
+    }
   }
   
   /* Texto Sobre Mim */
@@ -52,18 +58,41 @@
   }
   
   .about-text h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #00aaff;
     text-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
+    margin-bottom: 1rem;
   }
   
-  .about-text p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #ddd;
+  /* Efeito de Digitação */
+  .typing-effect {
+    display: inline-block;
+    border-right: 2px solid #00aaff;
+    white-space: normal;
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+    animation: typing 2.5s steps(50, end) forwards, blink 0.8s infinite;
   }
   
-  /* Responsividade */
+  /* Simulação de Digitação */
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  /* Efeito de Cursor Piscando */
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
+  /* Responsividade para telas menores */
   @media (max-width: 768px) {
     .about-container {
       flex-direction: column;
@@ -71,8 +100,8 @@
     }
   
     .about-image {
-      width: 180px;
-      height: 180px;
+      width: 220px;
+      height: 220px;
     }
   }
   
