@@ -11,7 +11,7 @@ const FlappyTech = () => {
   let birdY = 150;
   let velocity = 0;
   const gravity = 0.6;
-  const jump = -10;
+  const jump = -9;
   let pipes = [{ x: 300, height: Math.random() * 200 + 50 }];
 
   useEffect(() => {
