@@ -1,4 +1,4 @@
-import './Projects.css';
+import './projects.css';
 import HackerTyper from './HackerTyper';
 import FlappyTech from './FlappyTech';
 import AstroDodge from './AstroDodge';
