@@ -1,5 +1,5 @@
 
-import './Projects.css';
+//import './Projects.css';
 import HackerTyper from './HackerTyper';
 import FlappyTech from './FlappyTech';
 import AstroDodge from './AstroDodge';
