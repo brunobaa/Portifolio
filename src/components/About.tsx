@@ -19,7 +19,7 @@ const About = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           whileHover={{ scale: 1.1 }}
         >
-          <img src="/assets/minha-foto.jpeg" alt="Minha Foto" />
+          <img src="/assets/minha-foto.jpg" alt="Minha Foto" />
         </motion.div>
 
         {/* Texto Sobre Mim com Efeito de Digitação */}

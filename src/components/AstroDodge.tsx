@@ -13,33 +13,37 @@ const AstroDodge = () => {
   const shipHeight = 20;
   const [meteors, setMeteors] = useState([{ x: Math.random() * 300, y: -50 }]);
   const speed = 5;
-  let gameInterval: number;
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     canvas.width = 300;
     canvas.height = 400;
 
+    let animationFrameId: number;
+    let lastTime = 0;
+    const fps = 60;
+    const frameDuration = 1000 / fps;
+
     const drawShip = () => {
-      ctx.fillStyle = "#00ff00";
+      ctx.fillStyle = '#00ff00';
       ctx.fillRect(shipX, canvas.height - 30, shipWidth, shipHeight);
     };
 
     const drawMeteors = () => {
-      ctx.fillStyle = "#ff0000";
+      ctx.fillStyle = '#ff0000';
       meteors.forEach((meteor) => {
         ctx.fillRect(meteor.x, meteor.y, 20, 20);
       });
     };
 
     const drawScore = () => {
-      ctx.fillStyle = "#fff";
-      ctx.font = "16px Arial";
+      ctx.fillStyle = '#fff';
+      ctx.font = '16px Arial';
       ctx.fillText(`Score: ${score} | High Score: ${highScore}`, 10, 20);
     };
 
@@ -58,9 +62,15 @@ const AstroDodge = () => {
       });
     };
 
-    const update = () => {
-      if (!ctx) return;
+    const updateGame = (time: number) => {
+      if (time - lastTime < frameDuration) {
+        animationFrameId = requestAnimationFrame(updateGame);
+        return;
+      }
+      lastTime = time;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       setMeteors((prevMeteors) => {
         const updatedMeteors = prevMeteors.map((meteor) => ({ ...meteor, y: meteor.y + speed }));
         if (updatedMeteors[0].y > canvas.height) {
@@ -77,24 +87,29 @@ const AstroDodge = () => {
         }
         return updatedMeteors;
       });
+
       drawShip();
       drawMeteors();
       drawScore();
       checkCollision();
+      animationFrameId = requestAnimationFrame(updateGame);
     };
 
-    if (isPlaying) gameInterval = setInterval(update, 30);
-    return () => clearInterval(gameInterval);
+    if (isPlaying) {
+      updateGame(0);
+    }
+
+    return () => cancelAnimationFrame(animationFrameId);
   }, [isPlaying, score, highScore, shipX, meteors]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "ArrowLeft" && shipX > 0) setShipX((prev) => prev - 20);
-    if (e.key === "ArrowRight" && shipX < 260) setShipX((prev) => prev + 20);
+    if (e.key === 'ArrowLeft' && shipX > 0) setShipX((prev) => prev - 20);
+    if (e.key === 'ArrowRight' && shipX < 260) setShipX((prev) => prev + 20);
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [shipX]);
 
   return (

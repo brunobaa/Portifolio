@@ -1,5 +1,5 @@
 import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaDatabase } from "react-icons/fa";
-import { SiTypescript, SiMongodb, SiTailwindcss, SiUnity, SiC, SiCplusplus, SiPython, SiVite, SiGithub } from "react-icons/si";
+import { SiTypescript, SiMongodb, SiTailwindcss, SiUnity, SiC, SiCplusplus, SiPython, SiVite, SiGithub, SiOpengl } from "react-icons/si";
 import "./Skills.css";
 
 const skills = [
@@ -10,7 +10,7 @@ const skills = [
   { name: "JavaScript", icon: <FaJs className="skill-icon" /> },
   { name: "TypeScript", icon: <SiTypescript className="skill-icon" /> },
   { name: "Git", icon: <FaGitAlt className="skill-icon" /> },
-  { name: "GitHub", icon: <SiGithub className="skill-icon" /> },
+  { name: "OpenGL", icon: <SiOpengl className="skill-icon" /> },  // Alterado aqui
   { name: "SQL", icon: <FaDatabase className="skill-icon" /> },
   { name: "MongoDB", icon: <SiMongodb className="skill-icon" /> },
   { name: "Tailwind CSS", icon: <SiTailwindcss className="skill-icon" /> },
