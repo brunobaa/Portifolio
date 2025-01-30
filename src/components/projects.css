@@ -1,23 +1,62 @@
-.projects-container {
+.projects-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    padding: 40px 20px;
   }
   
-  .project-row {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 30px;
+  .projects-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1200px;
     width: 100%;
-    flex-wrap: wrap; 
+    padding: 20px;
   }
   
   .project {
-    flex: 1;
-    max-width: 400px; 
-    display: flex;
-    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    border: 2px solid #00ffcc;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(0, 255, 204, 0.7);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .project:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 30px rgba(0, 255, 204, 1);
+  }
+  
+  .project h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #00ffcc;
+  }
+  
+  .project canvas {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+  
+  .start-btn {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #000;
+    background: linear-gradient(135deg, #00ff00, #00cc00);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .start-btn:hover {
+    background: linear-gradient(135deg, #00cc00, #00ff00);
+    transform: scale(1.05);
   }
   

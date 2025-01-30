@@ -1,47 +1,40 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './HackerTyper.css';
 
+const codeSnippets = [
+  "function hackTheSystem() {",
+  "  let password = '12345';",
+  "  let accessGranted = false;",
+  "  if (password === '12345') accessGranted = true;",
+  "  console.log('Access Granted:', accessGranted);",
+  "}",
+  "hackTheSystem();",
+];
+
 const HackerTyper = () => {
-  const [text, setText] = useState('');
-  const [index, setIndex] = useState(0);
+  const [displayedCode, setDisplayedCode] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const hackerCode = `
-    function hackTheSystem() {
-      let password = '12345';
-      let access = false;
-      while (!access) {
-        if (password === 'opensesame') {
-          access = true;
-          console.log('Access Granted!');
-        }
-      }
+  const handleKeyPress = () => {
+    if (currentIndex < codeSnippets.join('\n').length) {
+      const fullCode = codeSnippets.join('\n');
+      setDisplayedCode(fullCode.substring(0, currentIndex + 1));
+      setCurrentIndex(currentIndex + 1);
     }
-  `;
-
-  useEffect(() => {
-    const handleKeyPress = () => {
-      setText((prev) => prev + hackerCode[index]);
-      setIndex((prev) => prev + 1);
-
-      if (index >= hackerCode.length) {
-        setIndex(0);
-        setText('');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [index]);
+  };
 
   return (
-    <div className="hacker-typer-container">
-      <h2>Quer se sentir um hacker?</h2>
-      <div className="hacker-typer-output">
-        <pre>{text}</pre>
+    <div
+      className="hacker-typer-wrapper"
+      tabIndex={0}
+      onKeyDown={handleKeyPress}
+    >
+      <div className="hacker-typer-header">TERMINAL HACKER SIMULATION</div>
+      <div className="hacker-typer-container">
+        <pre className="hacker-typer-code">{displayedCode}</pre>
       </div>
     </div>
   );
 };
-
 
 export default HackerTyper;
