@@ -1,4 +1,4 @@
-import React from 'react';
+
 import './Projects.css';
 import HackerTyper from './HackerTyper';
 import FlappyTech from './FlappyTech';

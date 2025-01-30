@@ -16,17 +16,17 @@ const Contact = () => {
 
     emailjs
       .sendForm(
-        "service_fuzsaeh",    // Seu Service ID
-        "template_6q9y1m6",   // Seu Template ID
+        "service_fuzsaeh",    
+        "template_6q9y1m6",   
         form.current,
-        "kXBNK5O12mcrwxxWO"   // Sua Public Key
+        "kXBNK5O12mcrwxxWO"   
       )
       .then(
         (result) => {
           console.log("Email enviado:", result.text);
           setIsSent(true);
           setLoading(false);
-          form.current?.reset(); // Limpa o formulário após o envio
+          form.current?.reset(); 
         },
         (error) => {
           console.error("Erro ao enviar email:", error.text);

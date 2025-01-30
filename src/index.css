@@ -29,7 +29,7 @@ section {
 
 .about-container {
   position: relative;
-  background: rgba(5, 5, 15, 0.95); /* Mais escuro, mas levemente translúcido */
+  background: rgba(5, 5, 15, 0.95);
   border: 2px solid #005577;
   box-shadow: 0px 0px 25px rgba(0, 85, 119, 0.7);
   padding: 20px;

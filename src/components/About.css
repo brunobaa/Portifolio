@@ -20,7 +20,6 @@
     width: 90%;
   }
   
-  /* Foto do Usuário (Aumentada e Animação Rápida) */
   .about-image {
     width: 280px;
     height: 280px;
@@ -28,7 +27,7 @@
     overflow: hidden;
     border: 4px solid #00aaff;
     box-shadow: 0 0 20px rgba(0, 170, 255, 0.6);
-    animation: pulse-neon 1s infinite alternate; /* Tempo da animação reduzido */
+    animation: pulse-neon 1s infinite alternate; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,7 +40,6 @@
     object-position: center;
   }
   
-  /* Animação de brilho pulsante (Agora mais rápida) */
   @keyframes pulse-neon {
     0% {
       box-shadow: 0 0 15px rgba(0, 170, 255, 0.6);
@@ -51,7 +49,6 @@
     }
   }
   
-  /* Texto Sobre Mim */
   .about-text {
     flex: 1;
     max-width: 600px;
@@ -64,7 +61,6 @@
     margin-bottom: 1rem;
   }
   
-  /* Efeito de Digitação */
   .typing-effect {
     display: inline-block;
     border-right: 2px solid #00aaff;
@@ -75,7 +71,6 @@
     animation: typing 2.5s steps(50, end) forwards, blink 0.8s infinite;
   }
   
-  /* Simulação de Digitação */
   @keyframes typing {
     from {
       width: 0;
@@ -85,14 +80,12 @@
     }
   }
   
-  /* Efeito de Cursor Piscando */
   @keyframes blink {
     50% {
       border-color: transparent;
     }
   }
   
-  /* Responsividade para telas menores */
   @media (max-width: 768px) {
     .about-container {
       flex-direction: column;

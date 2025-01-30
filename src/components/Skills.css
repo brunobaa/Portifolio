@@ -1,15 +1,15 @@
 .skills-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;  /* Mantém os itens centralizados */
+    justify-content: center;  
     gap: 1.5rem;
     max-width: 800px;
     margin: 2rem auto;
   }
   
-  /* Cada card de habilidade */
+
   .skill-card {
-    flex: 1 1 calc(25% - 1.5rem); /* Mantém um layout fluido, ajustando para 4 colunas */
+    flex: 1 1 calc(25% - 1.5rem); 
     max-width: 150px;
     background: rgba(0, 170, 255, 0.1);
     padding: 1rem;
@@ -35,22 +35,22 @@
     margin-bottom: 0.5rem;
   }
   
-  /* Responsividade: Ajuste automático das colunas */
+
   @media (max-width: 800px) {
     .skill-card {
-      flex: 1 1 calc(33.33% - 1.5rem); /* Reduz para 3 colunas */
+      flex: 1 1 calc(33.33% - 1.5rem); 
     }
   }
   
   @media (max-width: 600px) {
     .skill-card {
-      flex: 1 1 calc(50% - 1.5rem); /* Reduz para 2 colunas */
+      flex: 1 1 calc(50% - 1.5rem); 
     }
   }
   
   @media (max-width: 400px) {
     .skill-card {
-      flex: 1 1 100%; /* Em telas pequenas, apenas 1 coluna */
+      flex: 1 1 100%; 
     }
   }
   

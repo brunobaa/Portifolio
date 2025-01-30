@@ -31,7 +31,6 @@
     color: #ff0080;
   }
   
-  /* RESPONSIVO: Menu em telas pequenas */
   @media (max-width: 768px) {
     .header {
       flex-direction: column;

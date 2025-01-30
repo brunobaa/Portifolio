@@ -23,7 +23,6 @@
     margin-bottom: 2rem;
   }
   
-  /* Links de contato */
   .contact-links {
     display: flex;
     gap: 1.5rem;
@@ -44,12 +43,10 @@
     color: #ff0080;
   }
   
-  /* Ícones de Contato */
   .contact-icon {
     font-size: 1.5rem;
   }
   
-  /* Formulário de Contato */
   .contact-form {
     display: flex;
     flex-direction: column;

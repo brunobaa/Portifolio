@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './FlappyTech.css';
 
 const FlappyTech = () => {
@@ -79,7 +79,7 @@ const FlappyTech = () => {
       checkCollision();
       if (birdY > canvas.height || birdY < 0) {
         setIsPlaying(false);
-        setScore(0); // Resetar pontuação ao colidir
+        setScore(0); 
       }
     };
 
