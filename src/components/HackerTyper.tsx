@@ -43,4 +43,5 @@ const HackerTyper = () => {
   );
 };
 
+
 export default HackerTyper;
