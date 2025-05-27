@@ -23,7 +23,7 @@ const AstroDodge = () => {
       // reset speed on new game
       speedRef.current = 5;
       speedInterval = window.setInterval(() => {
-        speedRef.current += 0.7;
+        speedRef.current += 0.4;
       }, 1000);
     }
     return () => {
