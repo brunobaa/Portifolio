@@ -1,24 +1,26 @@
 import { FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaDatabase } from "react-icons/fa";
 import { SiTypescript, SiMongodb, SiTailwindcss, SiUnity, SiC, SiCplusplus, SiPython, SiVite, SiOpengl } from "react-icons/si";
+import { DiJava } from "react-icons/di";
 import "./Skills.css";
 
 const skills = [
-  { name: "React", icon: <FaReact className="skill-icon" /> },
-  { name: "Node.js", icon: <FaNodeJs className="skill-icon" /> },
-  { name: "HTML", icon: <FaHtml5 className="skill-icon" /> },
-  { name: "CSS", icon: <FaCss3Alt className="skill-icon" /> },
-  { name: "JavaScript", icon: <FaJs className="skill-icon" /> },
-  { name: "TypeScript", icon: <SiTypescript className="skill-icon" /> },
-  { name: "Git", icon: <FaGitAlt className="skill-icon" /> },
-  { name: "OpenGL", icon: <SiOpengl className="skill-icon" /> },  
-  { name: "SQL", icon: <FaDatabase className="skill-icon" /> },
-  { name: "MongoDB", icon: <SiMongodb className="skill-icon" /> },
+  { name: "React",        icon: <FaReact className="skill-icon" /> },
+  { name: "Node.js",      icon: <FaNodeJs className="skill-icon" /> },
+  { name: "HTML",         icon: <FaHtml5 className="skill-icon" /> },
+  { name: "CSS",          icon: <FaCss3Alt className="skill-icon" /> },
+  { name: "JavaScript",   icon: <FaJs className="skill-icon" /> },
+  { name: "TypeScript",   icon: <SiTypescript className="skill-icon" /> },
+  { name: "Java",         icon: <DiJava className="skill-icon" /> },
+  { name: "Git",          icon: <FaGitAlt className="skill-icon" /> },
+  { name: "OpenGL",       icon: <SiOpengl className="skill-icon" /> },
+  { name: "SQL",          icon: <FaDatabase className="skill-icon" /> },
+  { name: "MongoDB",      icon: <SiMongodb className="skill-icon" /> },
   { name: "Tailwind CSS", icon: <SiTailwindcss className="skill-icon" /> },
-  { name: "Unity", icon: <SiUnity className="skill-icon" /> },
-  { name: "C", icon: <SiC className="skill-icon" /> },
-  { name: "C++", icon: <SiCplusplus className="skill-icon" /> },
-  { name: "Python", icon: <SiPython className="skill-icon" /> },
-  { name: "Vite", icon: <SiVite className="skill-icon" /> },
+  { name: "Unity",        icon: <SiUnity className="skill-icon" /> },
+  { name: "C",            icon: <SiC className="skill-icon" /> },
+  { name: "C++",          icon: <SiCplusplus className="skill-icon" /> },
+  { name: "Python",       icon: <SiPython className="skill-icon" /> },
+  { name: "Vite",         icon: <SiVite className="skill-icon" /> },
 ];
 
 const Skills = () => {

@@ -12,7 +12,24 @@ const AstroDodge = () => {
   const shipWidth = 40;
   const shipHeight = 20;
   const [meteors, setMeteors] = useState([{ x: Math.random() * 300, y: -50 }]);
-  const speed = 5;
+
+  // useRef to hold dynamic speed
+  const speedRef = useRef(5);
+
+  // Increase speed every second when playing
+  useEffect(() => {
+    let speedInterval: number;
+    if (isPlaying) {
+      // reset speed on new game
+      speedRef.current = 5;
+      speedInterval = window.setInterval(() => {
+        speedRef.current += 0.7;
+      }, 1000);
+    }
+    return () => {
+      window.clearInterval(speedInterval);
+    };
+  }, [isPlaying]);
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement;
@@ -72,7 +89,10 @@ const AstroDodge = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       setMeteors((prevMeteors) => {
-        const updatedMeteors = prevMeteors.map((meteor) => ({ ...meteor, y: meteor.y + speed }));
+        const updatedMeteors = prevMeteors.map((meteor) => ({
+          ...meteor,
+          y: meteor.y + speedRef.current,
+        }));
         if (updatedMeteors[0].y > canvas.height) {
           updatedMeteors.shift();
           updatedMeteors.push({ x: Math.random() * 280, y: -20 });
@@ -118,7 +138,9 @@ const AstroDodge = () => {
       <canvas ref={canvasRef}></canvas>
       <p>Score: {score} | High Score: {highScore}</p>
       {!isPlaying && (
-        <button onClick={() => setIsPlaying(true)} className="start-btn">Start</button>
+        <button onClick={() => setIsPlaying(true)} className="start-btn">
+          Start
+        </button>
       )}
     </div>
   );
