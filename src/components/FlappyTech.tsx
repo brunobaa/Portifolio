@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import GameFrame from './GameFrame';
 import { loadBest, saveBest, setupCanvas } from './gameUtils';
+import { useLanguage } from '../i18n/useLanguage';
 
 const W = 300;
 const H = 400;
@@ -20,6 +21,8 @@ type Status = 'idle' | 'playing' | 'over';
 const newPipe = (x: number): Pipe => ({ x, gapY: 60 + Math.random() * (H - GAP - 120), passed: false });
 
 const FlappyTech = () => {
+  const { t } = useLanguage();
+  const g = t.games;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bird = useRef({ y: H / 2, v: 0 });
   const pipes = useRef<Pipe[]>([]);
@@ -141,21 +144,21 @@ const FlappyTech = () => {
 
   const overlay =
     status === 'idle' ? (
-      <button className="game-start" onClick={flap}>Jogar</button>
+      <button className="game-start" onClick={flap}>{g.start}</button>
     ) : status === 'over' ? (
       <>
-        <p className="game-over">Game over · {score} pts</p>
-        <button className="game-start" onClick={flap}>Jogar de novo</button>
+        <p className="game-over">{g.flappy.over} · {score} {g.points}</p>
+        <button className="game-start" onClick={flap}>{g.playAgain}</button>
       </>
     ) : null;
 
   return (
-    <GameFrame file="flappy_tech.ts" hint="Clique ou espaço" score={score} best={best} overlay={overlay}>
+    <GameFrame file="flappy_tech.ts" hint={g.flappy.hint} score={score} best={best} overlay={overlay}>
       <canvas
         ref={canvasRef}
         className="game-canvas"
         tabIndex={0}
-        aria-label="Jogo Flappy Tech"
+        aria-label={g.flappy.aria}
         onPointerDown={() => status === 'playing' && flap()}
         onKeyDown={(e) => {
           if (e.code === 'Space') {

@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
-import { MotionConfig } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { MotionConfig, animate } from 'framer-motion';
+import { useLanguage } from './i18n/useLanguage';
 import Header from './components/Header.tsx';
 import Hero from './components/Hero.tsx';
 import Experience from './components/Experience.tsx';
@@ -11,6 +12,21 @@ import Contact from './components/Contact.tsx';
 import Footer from './components/Footer.tsx';
 
 function App() {
+  const { lang } = useLanguage();
+  const mainRef = useRef<HTMLElement>(null);
+  const firstRender = useRef(true);
+
+  // Transição suave do conteúdo ao trocar de idioma
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    if (mainRef.current) {
+      animate(mainRef.current, { opacity: [0.2, 1], filter: ['blur(6px)', 'blur(0px)'] }, { duration: 0.45 });
+    }
+  }, [lang]);
+
   // Brilho dos cartões (.card) que acompanha o mouse
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -30,7 +46,7 @@ function App() {
       <div className="bg-glow one" aria-hidden="true" />
       <div className="bg-glow two" aria-hidden="true" />
       <Header />
-      <main>
+      <main ref={mainRef}>
         <Hero />
         <Experience />
         <Education />

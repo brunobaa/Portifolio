@@ -2,12 +2,15 @@ import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FaGithub, FaEnvelope, FaLinkedin, FaPaperPlane } from "react-icons/fa";
 import { profile } from "../data/profile";
+import { useLanguage } from "../i18n/useLanguage";
 import { Reveal, SectionHeading } from './ui';
 import "./Contact.css";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
 const Contact = () => {
+  const { t } = useLanguage();
+  const c = t.contact;
   const form = useRef<HTMLFormElement | null>(null);
   const [status, setStatus] = useState<Status>("idle");
 
@@ -37,7 +40,7 @@ const Contact = () => {
   };
 
   const links = [
-    { href: `mailto:${profile.email}`, icon: <FaEnvelope />, label: "E-mail", value: profile.email },
+    { href: `mailto:${profile.email}`, icon: <FaEnvelope />, label: c.emailLabel, value: profile.email },
     { href: profile.linkedin, icon: <FaLinkedin />, label: "LinkedIn", value: "bruno-andrade" },
     { href: profile.github, icon: <FaGithub />, label: "GitHub", value: "brunobaa" },
   ];
@@ -46,16 +49,16 @@ const Contact = () => {
     <section id="contact" className="section">
       <SectionHeading
         index="06"
-        label="contato"
-        title={<>Vamos <span className="gradient-text">conversar?</span></>}
-        subtitle="Estou aberto a oportunidades de estágio e trabalho. Respondo rápido."
+        label={c.label}
+        title={<>{c.titleStart} <span className="gradient-text">{c.titleHighlight}</span></>}
+        subtitle={c.subtitle}
       />
 
       <div className="contact-grid">
         <Reveal className="contact-links">
           {links.map(({ href, icon, label, value }) => (
             <a
-              key={label}
+              key={href}
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
               rel="noopener noreferrer"
@@ -73,23 +76,23 @@ const Contact = () => {
         <Reveal delay={0.1}>
           <form ref={form} onSubmit={sendEmail} className="card contact-form">
             <label>
-              Nome
-              <input type="text" name="from_name" placeholder="Seu nome" required />
+              {c.name}
+              <input type="text" name="from_name" placeholder={c.namePlaceholder} required />
             </label>
             <label>
-              E-mail
-              <input type="email" name="from_email" placeholder="voce@empresa.com" required />
+              {c.email}
+              <input type="email" name="from_email" placeholder={c.emailPlaceholder} required />
             </label>
             <label>
-              Mensagem
-              <textarea name="message" placeholder="Conte um pouco sobre a oportunidade…" required />
+              {c.message}
+              <textarea name="message" placeholder={c.messagePlaceholder} required />
             </label>
             <button type="submit" className="btn btn-primary" disabled={status === "sending"}>
-              {status === "sending" ? "Enviando…" : <>Enviar mensagem <FaPaperPlane /></>}
+              {status === "sending" ? c.sending : <>{c.send} <FaPaperPlane /></>}
             </button>
-            {status === "sent" && <p className="form-feedback success">Mensagem enviada! Retorno em breve.</p>}
+            {status === "sent" && <p className="form-feedback success">{c.sent}</p>}
             {status === "error" && (
-              <p className="form-feedback error">Não foi possível enviar. Tente pelo e-mail ao lado.</p>
+              <p className="form-feedback error">{c.error}</p>
             )}
           </form>
         </Reveal>

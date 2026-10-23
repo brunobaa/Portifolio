@@ -1,18 +1,20 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaArrowRight, FaRegFolder } from 'react-icons/fa';
-import { projects, profile } from '../data/profile';
+import { profile } from '../data/profile';
+import { useLanguage } from "../i18n/useLanguage";
 import { Reveal, SectionHeading } from './ui';
 import { fadeUp, stagger } from './motion';
 import './projects.css';
 
 const Projects = () => {
+  const { t } = useLanguage();
   return (
     <section id="projects" className="section">
       <SectionHeading
         index="04"
-        label="projetos"
-        title="Código que já escrevi"
-        subtitle="Trabalhos da faculdade e projetos pessoais, de sistemas operacionais a jogos em rede."
+        label={t.projects.label}
+        title={t.projects.title}
+        subtitle={t.projects.subtitle}
       />
 
       <motion.div
@@ -22,9 +24,9 @@ const Projects = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
       >
-        {projects.map(({ title, description, tech, link }) => (
+        {t.projects.items.map(({ title, description, tech, link }) => (
           <motion.a
-            key={title}
+            key={link}
             href={link}
             target="_blank"
             rel="noopener noreferrer"
@@ -34,7 +36,7 @@ const Projects = () => {
           >
             <div className="project-top">
               <FaRegFolder className="project-folder" />
-              <FaGithub className="project-gh" aria-label="Ver no GitHub" />
+              <FaGithub className="project-gh" aria-label={t.projects.viewOnGithub} />
             </div>
             <h3>{title}</h3>
             <p>{description}</p>
@@ -49,7 +51,7 @@ const Projects = () => {
 
       <Reveal className="all-projects">
         <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn">
-          Ver todos os repositórios <FaArrowRight />
+          {t.projects.viewAll} <FaArrowRight />
         </a>
       </Reveal>
     </section>

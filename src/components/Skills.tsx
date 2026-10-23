@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { FaServer, FaCode, FaLandmark } from "react-icons/fa";
-import { skillGroups } from "../data/profile";
+import { useLanguage } from "../i18n/useLanguage";
 import { SectionHeading } from './ui';
 import { fadeUp, stagger } from './motion';
 import "./Skills.css";
 
-// Ícone de cada grupo, na mesma ordem de skillGroups
+// Ícone de cada grupo, na mesma ordem de skills.groups
 const groupIcons = [FaServer, FaCode, FaLandmark];
 
 const chip = {
@@ -14,13 +14,14 @@ const chip = {
 };
 
 const Skills = () => {
+  const { t } = useLanguage();
   return (
     <section id="skills" className="section">
       <SectionHeading
         index="03"
-        label="habilidades"
-        title="Ferramentas que uso no dia a dia"
-        subtitle="Da bancada ao código: suporte, infraestrutura e desenvolvimento."
+        label={t.skills.label}
+        title={t.skills.title}
+        subtitle={t.skills.subtitle}
       />
 
       <motion.div
@@ -30,10 +31,10 @@ const Skills = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
       >
-        {skillGroups.map((group, idx) => {
+        {t.skills.groups.map((group, idx) => {
           const Icon = groupIcons[idx] ?? FaCode;
           return (
-            <motion.div key={group.title} className="card skill-group" variants={fadeUp}>
+            <motion.div key={idx} className="card skill-group" variants={fadeUp}>
               <h3>
                 <span className="icon-box"><Icon /></span>
                 {group.title}

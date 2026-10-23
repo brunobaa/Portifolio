@@ -4,23 +4,22 @@ import FlappyTech from './FlappyTech';
 import AstroDodge from './AstroDodge';
 import { SectionHeading } from './ui';
 import { fadeUp, stagger } from './motion';
+import { useLanguage } from '../i18n/useLanguage';
 import './Games.css';
 
-const games = [
-  { title: 'Terminal de suporte', description: 'Digite qualquer coisa e veja um script de diagnóstico se escrever.', component: <HackerTyper /> },
-  { title: 'Flappy Tech', description: 'Desvie dos canos sem encostar. Quanto mais longe, melhor.', component: <FlappyTech /> },
-  { title: 'Astro Dodge', description: 'Pilote a nave e desvie dos asteroides, que ficam cada vez mais rápidos.', component: <AstroDodge /> },
-];
-
 const Games = () => {
+  const { t, lang } = useLanguage();
+  const g = t.games;
+
+  const games = [
+    { key: 'terminal', text: g.terminal, component: <HackerTyper key={lang} /> }, // recomeça o script ao trocar de idioma
+    { key: 'flappy', text: g.flappy, component: <FlappyTech /> },
+    { key: 'astro', text: g.astro, component: <AstroDodge /> },
+  ];
+
   return (
     <section id="games" className="section">
-      <SectionHeading
-        index="05"
-        label="playground"
-        title="Brincadeiras interativas"
-        subtitle="Mini-jogos que programei do zero em TypeScript e Canvas, rodando aqui mesmo no navegador."
-      />
+      <SectionHeading index="05" label={g.label} title={g.title} subtitle={g.subtitle} />
 
       <motion.div
         className="games-grid"
@@ -29,10 +28,10 @@ const Games = () => {
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
       >
-        {games.map(({ title, description, component }) => (
-          <motion.div key={title} className="game-item" variants={fadeUp}>
-            <h3>{title}</h3>
-            <p>{description}</p>
+        {games.map(({ key, text, component }) => (
+          <motion.div key={key} className="game-item" variants={fadeUp}>
+            <h3>{text.title}</h3>
+            <p>{text.description}</p>
             {component}
           </motion.div>
         ))}

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import GameFrame from './GameFrame';
 import { loadBest, saveBest, setupCanvas } from './gameUtils';
+import { useLanguage } from '../i18n/useLanguage';
 
 const W = 300;
 const H = 400;
@@ -21,6 +22,8 @@ const stars: Star[] = Array.from({ length: 40 }, () => ({
 }));
 
 const AstroDodge = () => {
+  const { t } = useLanguage();
+  const g = t.games;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const shipX = useRef(W / 2 - SHIP_W / 2);
   const targetX = useRef<number | null>(null);
@@ -176,21 +179,21 @@ const AstroDodge = () => {
 
   const overlay =
     status === 'idle' ? (
-      <button className="game-start" onClick={start}>Jogar</button>
+      <button className="game-start" onClick={start}>{g.start}</button>
     ) : status === 'over' ? (
       <>
-        <p className="game-over">Nave atingida · {score} pts</p>
-        <button className="game-start" onClick={start}>Jogar de novo</button>
+        <p className="game-over">{g.astro.over} · {score} {g.points}</p>
+        <button className="game-start" onClick={start}>{g.playAgain}</button>
       </>
     ) : null;
 
   return (
-    <GameFrame file="astro_dodge.ts" hint="Setas, mouse ou dedo" score={score} best={best} overlay={overlay}>
+    <GameFrame file="astro_dodge.ts" hint={g.astro.hint} score={score} best={best} overlay={overlay}>
       <canvas
         ref={canvasRef}
         className="game-canvas touch-none"
         tabIndex={0}
-        aria-label="Jogo Astro Dodge"
+        aria-label={g.astro.aria}
         onPointerMove={onPointer}
         onPointerDown={onPointer}
       />

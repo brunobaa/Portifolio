@@ -1,23 +1,20 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaGlobeAmericas } from 'react-icons/fa';
+import { useLanguage } from '../i18n/useLanguage';
 import './Header.css'
 
-const links = [
-  { id: 'experience', label: 'Experiência' },
-  { id: 'education', label: 'Formação' },
-  { id: 'skills', label: 'Habilidades' },
-  { id: 'projects', label: 'Projetos' },
-  { id: 'games', label: 'Jogos' },
-  { id: 'contact', label: 'Contato' },
-];
+const sectionIds = ['experience', 'education', 'skills', 'projects', 'games', 'contact'] as const;
 
 function Header() {
+  const { t, lang, toggleLang } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
   const [open, setOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25 });
+
+  const links = sectionIds.map((id) => ({ id, label: t.nav[id] }));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -36,12 +33,36 @@ function Header() {
       },
       { rootMargin: '-45% 0px -50% 0px' }
     );
-    links.forEach(({ id }) => {
+    sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
   }, []);
+
+  // O botão fica escrito no idioma de destino, para quem não lê o atual
+  const targetLang = lang === 'pt' ? 'en' : 'pt';
+  const langButton = (
+    <button
+      className="lang-toggle"
+      onClick={toggleLang}
+      lang={targetLang}
+      aria-label={t.nav.switchAria}
+      title={t.nav.switchAria}
+    >
+      <motion.span
+        key={lang}
+        className="lang-icon"
+        initial={{ rotate: -180, opacity: 0 }}
+        animate={{ rotate: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <FaGlobeAmericas />
+      </motion.span>
+      <span className="lang-full">{t.nav.switchLabel}</span>
+      <span className="lang-short">{t.nav.switchShort}</span>
+    </button>
+  );
 
   return (
     <header className={`header ${scrolled || open ? 'scrolled' : ''}`}>
@@ -51,7 +72,7 @@ function Header() {
           <span className="logo-text">Bruno Andrade</span>
         </a>
 
-        <nav className="header-nav" aria-label="Navegação principal">
+        <nav className="header-nav" aria-label="Menu">
           {links.map(({ id, label }) => (
             <a key={id} href={`#${id}`} className={active === id ? 'active' : ''}>
               {label}
@@ -60,14 +81,17 @@ function Header() {
           ))}
         </nav>
 
-        <button
-          className="menu-toggle"
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? 'Fechar menu' : 'Abrir menu'}
-          aria-expanded={open}
-        >
-          {open ? <FaTimes /> : <FaBars />}
-        </button>
+        <div className="header-actions">
+          {langButton}
+          <button
+            className="menu-toggle"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
+            aria-expanded={open}
+          >
+            {open ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -78,7 +102,7 @@ function Header() {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            aria-label="Navegação"
+            aria-label="Menu"
           >
             {links.map(({ id, label }) => (
               <a key={id} href={`#${id}`} onClick={() => setOpen(false)}>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaArrowRight, FaMapMarkerAlt, FaCheck } from "react-icons/fa";
-import { profile, highlights, roles, stats } from "../data/profile";
+import { profile } from "../data/profile";
+import { useLanguage } from "../i18n/useLanguage";
 import { fadeUp, stagger } from './motion';
 import "./Hero.css";
 
-// Digita e apaga cada frase de `roles` em sequência
-const useTypewriter = (words: string[]) => {
+// Digita e apaga cada frase em sequência
+const Typewriter = ({ words }: { words: string[] }) => {
   const [text, setText] = useState("");
   const [index, setIndex] = useState(0);
   const [deleting, setDeleting] = useState(false);
@@ -29,35 +30,36 @@ const useTypewriter = (words: string[]) => {
     return () => clearTimeout(timer);
   }, [text, deleting, index, words]);
 
-  return text;
+  return <>{text}</>;
 };
 
 const Hero = () => {
-  const typed = useTypewriter(roles);
+  const { t, lang } = useLanguage();
+  const h = t.hero;
 
   return (
     <section id="inicio" className="hero section">
       <div className="hero-grid">
         <motion.div className="hero-text" variants={stagger(0.1)} initial="hidden" animate="visible">
           <motion.span className="hero-status" variants={fadeUp}>
-            <span className="status-dot" /> {profile.status}
+            <span className="status-dot" /> {h.status}
           </motion.span>
 
           <motion.h1 className="hero-name" variants={fadeUp}>
-            Olá, eu sou <span className="gradient-text">{profile.name}</span>
+            {h.greeting} <span className="gradient-text">{profile.name}</span>
           </motion.h1>
 
           <motion.p className="hero-role" variants={fadeUp}>
-            <span className="prompt">&gt;</span> {typed}
+            <span className="prompt">&gt;</span> <Typewriter key={lang} words={h.roles} />
             <span className="caret" aria-hidden="true" />
           </motion.p>
 
           <motion.p className="hero-summary" variants={fadeUp}>
-            {profile.summary}
+            {h.summary}
           </motion.p>
 
           <motion.ul className="hero-highlights" variants={fadeUp}>
-            {highlights.map((item) => (
+            {h.highlights.map((item) => (
               <li key={item}>
                 <FaCheck className="check" /> {item}
               </li>
@@ -66,7 +68,7 @@ const Hero = () => {
 
           <motion.div className="hero-actions" variants={fadeUp}>
             <a href="#contact" className="btn btn-primary">
-              Fale comigo <FaArrowRight />
+              {h.contactCta} <FaArrowRight />
             </a>
             <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="btn">
               <FaLinkedin /> LinkedIn
@@ -84,7 +86,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="photo-ring">
-            <img src={profile.photo} alt={`Foto de ${profile.name}`} />
+            <img src={profile.photo} alt={h.photoAlt} />
           </div>
 
           <motion.div
@@ -98,9 +100,9 @@ const Hero = () => {
             </div>
             <code>
               <span className="t-muted">$</span> whoami<br />
-              <span className="t-accent">bruno</span> · estagiário @ SJCDH<br />
+              <span className="t-accent">bruno</span> · {h.terminalRole}<br />
               <span className="t-muted">$</span> location<br />
-              <FaMapMarkerAlt className="t-pin" /> {profile.location}
+              <FaMapMarkerAlt className="t-pin" /> {h.location}
             </code>
           </motion.div>
         </motion.div>
@@ -113,8 +115,8 @@ const Hero = () => {
         animate="visible"
         transition={{ delayChildren: 0.6 }}
       >
-        {stats.map((stat) => (
-          <motion.li key={stat.label} variants={fadeUp}>
+        {h.stats.map((stat) => (
+          <motion.li key={stat.href} variants={fadeUp}>
             <a href={stat.href} className="card stat">
               <strong className="gradient-text">{stat.value}</strong>
               <span>{stat.label}</span>
