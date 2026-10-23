@@ -124,10 +124,6 @@ export const pt: Content = {
           "Python", "C / C++", "Go", "HTML / CSS", "SQL", "Git", "OpenGL",
         ],
       },
-      {
-        title: "Sistemas do Governo do RS",
-        items: ["MinhaProcergs", "SOE", "GCE", "SEI", "PROA"],
-      },
     ],
   },
 

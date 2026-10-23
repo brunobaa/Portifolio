@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import { FaServer, FaCode, FaLandmark } from "react-icons/fa";
+import { FaServer, FaCode } from "react-icons/fa";
 import { useLanguage } from "../i18n/useLanguage";
 import { SectionHeading } from './ui';
 import { fadeUp, stagger } from './motion';
 import "./Skills.css";
 
 // Ícone de cada grupo, na mesma ordem de skills.groups
-const groupIcons = [FaServer, FaCode, FaLandmark];
+const groupIcons = [FaServer, FaCode];
 
 const chip = {
   hidden: { opacity: 0, scale: 0.85 },
