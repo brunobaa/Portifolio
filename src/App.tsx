@@ -10,6 +10,7 @@ import Projects from './components/Projects.tsx';
 import Games from './components/Games.tsx';
 import Contact from './components/Contact.tsx';
 import Footer from './components/Footer.tsx';
+import LanguageGate from './components/LanguageGate.tsx';
 
 function App() {
   const { lang } = useLanguage();
@@ -56,6 +57,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <LanguageGate />
     </MotionConfig>
   );
 }
