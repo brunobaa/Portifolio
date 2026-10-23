@@ -20,11 +20,12 @@ export const roles = [
   "Desenvolvimento Full-Stack",
 ];
 
+// Cards de destaque do topo; cada um leva à seção relacionada
 export const stats = [
-  { value: "N1–N3", label: "níveis de atendimento" },
-  { value: "5", label: "sistemas do Estado no dia a dia" },
-  { value: "7+", label: "projetos no GitHub" },
-  { value: "PT · EN", label: "idiomas fluentes" },
+  { value: "N1–N3", label: "níveis de atendimento", href: "#experience" },
+  { value: "Win · Linux", label: "sistemas operacionais", href: "#skills" },
+  { value: "7+", label: "projetos no GitHub", href: "#projects" },
+  { value: "PT · EN", label: "idiomas fluentes", href: "#education" },
 ];
 
 export const highlights = [

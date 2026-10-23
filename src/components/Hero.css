@@ -242,10 +242,33 @@
 }
 
 .stat {
+  height: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-decoration: none;
+}
+
+.stat:hover {
+  transform: translateY(-4px);
+}
+
+.stat-arrow {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s, color 0.2s;
+}
+
+.stat:hover .stat-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--accent-2);
 }
 
 .stat strong {

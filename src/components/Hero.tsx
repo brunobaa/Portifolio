@@ -114,9 +114,12 @@ const Hero = () => {
         transition={{ delayChildren: 0.6 }}
       >
         {stats.map((stat) => (
-          <motion.li key={stat.label} className="card stat" variants={fadeUp}>
-            <strong className="gradient-text">{stat.value}</strong>
-            <span>{stat.label}</span>
+          <motion.li key={stat.label} variants={fadeUp}>
+            <a href={stat.href} className="card stat">
+              <strong className="gradient-text">{stat.value}</strong>
+              <span>{stat.label}</span>
+              <FaArrowRight className="stat-arrow" aria-hidden="true" />
+            </a>
           </motion.li>
         ))}
       </motion.ul>
