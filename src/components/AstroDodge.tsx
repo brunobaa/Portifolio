@@ -1,148 +1,200 @@
-import { useEffect, useRef, useState } from 'react';
-import './AstroDodge.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import GameFrame from './GameFrame';
+import { loadBest, saveBest, setupCanvas } from './gameUtils';
+
+const W = 300;
+const H = 400;
+const SHIP_W = 30;
+const SHIP_H = 26;
+const SHIP_Y = H - 46;
+const SHIP_SPEED = 5;
+const BEST_KEY = 'astroBest';
+
+type Meteor = { x: number; y: number; r: number; v: number };
+type Star = { x: number; y: number; s: number };
+type Status = 'idle' | 'playing' | 'over';
+
+const stars: Star[] = Array.from({ length: 40 }, () => ({
+  x: Math.random() * W,
+  y: Math.random() * H,
+  s: Math.random() * 1.5 + 0.3,
+}));
 
 const AstroDodge = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const shipX = useRef(W / 2 - SHIP_W / 2);
+  const targetX = useRef<number | null>(null);
+  const keys = useRef({ left: false, right: false });
+  const meteors = useRef<Meteor[]>([]);
+  const scoreRef = useRef(0);
+  const [status, setStatus] = useState<Status>('idle');
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(
-    Number(localStorage.getItem('astroHighScore')) || 0
-  );
-  const [shipX, setShipX] = useState(150);
-  const shipWidth = 40;
-  const shipHeight = 20;
-  const [meteors, setMeteors] = useState([{ x: Math.random() * 300, y: -50 }]);
+  const [best, setBest] = useState(() => loadBest(BEST_KEY));
 
-  // useRef to hold dynamic speed
-  const speedRef = useRef(5);
+  const draw = useCallback((ctx: CanvasRenderingContext2D) => {
+    ctx.clearRect(0, 0, W, H);
 
-  // Increase speed every second when playing
-  useEffect(() => {
-    let speedInterval: number;
-    if (isPlaying) {
-      // reset speed on new game
-      speedRef.current = 5;
-      speedInterval = window.setInterval(() => {
-        speedRef.current += 0.4;
-      }, 1000);
-    }
-    return () => {
-      window.clearInterval(speedInterval);
-    };
-  }, [isPlaying]);
+    ctx.fillStyle = 'rgba(230,237,246,0.6)';
+    stars.forEach((st) => ctx.fillRect(st.x, st.y, st.s, st.s));
 
-  useEffect(() => {
-    const canvas = canvasRef.current as HTMLCanvasElement;
-    if (!canvas) return;
+    meteors.current.forEach((m) => {
+      ctx.save();
+      ctx.shadowColor = '#8b5cf6';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#8b5cf6';
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const x = shipX.current;
+    ctx.save();
+    ctx.shadowColor = '#22d3ee';
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = '#22d3ee';
+    ctx.beginPath();
+    ctx.moveTo(x + SHIP_W / 2, SHIP_Y);
+    ctx.lineTo(x + SHIP_W, SHIP_Y + SHIP_H);
+    ctx.lineTo(x, SHIP_Y + SHIP_H);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }, []);
 
-    canvas.width = 300;
-    canvas.height = 400;
-
-    let animationFrameId: number;
-    let lastTime = 0;
-    const fps = 60;
-    const frameDuration = 1000 / fps;
-
-    const drawShip = () => {
-      ctx.fillStyle = '#00ff00';
-      ctx.fillRect(shipX, canvas.height - 30, shipWidth, shipHeight);
-    };
-
-    const drawMeteors = () => {
-      ctx.fillStyle = '#ff0000';
-      meteors.forEach((meteor) => {
-        ctx.fillRect(meteor.x, meteor.y, 20, 20);
-      });
-    };
-
-    const drawScore = () => {
-      ctx.fillStyle = '#fff';
-      ctx.font = '16px Arial';
-      ctx.fillText(`Score: ${score} | High Score: ${highScore}`, 10, 20);
-    };
-
-    const checkCollision = () => {
-      meteors.forEach((meteor) => {
-        if (
-          meteor.y + 20 > canvas.height - 30 &&
-          meteor.x < shipX + shipWidth &&
-          meteor.x + 20 > shipX
-        ) {
-          setIsPlaying(false);
-          setScore(0);
-          setShipX(150);
-          setMeteors([{ x: Math.random() * 300, y: -50 }]);
-        }
-      });
-    };
-
-    const updateGame = (time: number) => {
-      if (time - lastTime < frameDuration) {
-        animationFrameId = requestAnimationFrame(updateGame);
-        return;
-      }
-      lastTime = time;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      setMeteors((prevMeteors) => {
-        const updatedMeteors = prevMeteors.map((meteor) => ({
-          ...meteor,
-          y: meteor.y + speedRef.current,
-        }));
-        if (updatedMeteors[0].y > canvas.height) {
-          updatedMeteors.shift();
-          updatedMeteors.push({ x: Math.random() * 280, y: -20 });
-          setScore((prevScore) => {
-            const newScore = prevScore + 1;
-            if (newScore > highScore) {
-              setHighScore(newScore);
-              localStorage.setItem('astroHighScore', newScore.toString());
-            }
-            return newScore;
-          });
-        }
-        return updatedMeteors;
-      });
-
-      drawShip();
-      drawMeteors();
-      drawScore();
-      checkCollision();
-      animationFrameId = requestAnimationFrame(updateGame);
-    };
-
-    if (isPlaying) {
-      updateGame(0);
-    }
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isPlaying, score, highScore, shipX, meteors]);
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft' && shipX > 0) setShipX((prev) => prev - 20);
-    if (e.key === 'ArrowRight' && shipX < 260) setShipX((prev) => prev + 20);
+  const start = () => {
+    shipX.current = W / 2 - SHIP_W / 2;
+    targetX.current = null;
+    meteors.current = [];
+    scoreRef.current = 0;
+    setScore(0);
+    setStatus('playing');
+    canvasRef.current?.focus();
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [shipX]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = setupCanvas(canvas, W, H);
+    if (ctx) draw(ctx);
+  }, [draw]);
+
+  // Setas só controlam a nave durante a partida, sem rolar a página
+  useEffect(() => {
+    if (status !== 'playing') return;
+    const onKey = (down: boolean) => (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        keys.current[e.key === 'ArrowLeft' ? 'left' : 'right'] = down;
+        targetX.current = null;
+      }
+    };
+    const onDown = onKey(true);
+    const onUp = onKey(false);
+    window.addEventListener('keydown', onDown);
+    window.addEventListener('keyup', onUp);
+    return () => {
+      window.removeEventListener('keydown', onDown);
+      window.removeEventListener('keyup', onUp);
+      keys.current = { left: false, right: false };
+    };
+  }, [status]);
+
+  useEffect(() => {
+    if (status !== 'playing') return;
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx) return;
+
+    let frame = 0;
+    let last = performance.now();
+    let elapsed = 0;
+    let spawnIn = 0;
+
+    const tick = (now: number) => {
+      const k = Math.min((now - last) / 16.67, 3);
+      last = now;
+      elapsed += k;
+      const difficulty = 1 + elapsed / 900;
+
+      // movimento da nave: teclado ou dedo/mouse
+      if (keys.current.left) shipX.current -= SHIP_SPEED * k;
+      if (keys.current.right) shipX.current += SHIP_SPEED * k;
+      if (targetX.current !== null) {
+        shipX.current += (targetX.current - SHIP_W / 2 - shipX.current) * 0.25 * k;
+      }
+      shipX.current = Math.max(0, Math.min(W - SHIP_W, shipX.current));
+
+      stars.forEach((st) => {
+        st.y += st.s * 0.6 * k * difficulty;
+        if (st.y > H) st.y = 0;
+      });
+
+      spawnIn -= k;
+      if (spawnIn <= 0) {
+        const r = 8 + Math.random() * 10;
+        meteors.current.push({ x: r + Math.random() * (W - 2 * r), y: -r, r, v: (2 + Math.random() * 1.5) * difficulty });
+        spawnIn = Math.max(14, 42 / difficulty);
+      }
+
+      let hit = false;
+      meteors.current = meteors.current.filter((m) => {
+        m.y += m.v * k;
+        const cx = Math.max(shipX.current, Math.min(m.x, shipX.current + SHIP_W));
+        const cy = Math.max(SHIP_Y + 6, Math.min(m.y, SHIP_Y + SHIP_H));
+        if ((m.x - cx) ** 2 + (m.y - cy) ** 2 < (m.r * 0.85) ** 2) hit = true;
+        if (m.y - m.r > H) {
+          scoreRef.current += 1;
+          setScore(scoreRef.current);
+          return false;
+        }
+        return true;
+      });
+
+      draw(ctx);
+
+      if (hit) {
+        setStatus('over');
+        setBest((prev) => {
+          const next = Math.max(prev, scoreRef.current);
+          saveBest(BEST_KEY, next);
+          return next;
+        });
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [status, draw]);
+
+  const onPointer = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (status !== 'playing') return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    targetX.current = ((e.clientX - rect.left) / rect.width) * W;
+  };
+
+  const overlay =
+    status === 'idle' ? (
+      <button className="game-start" onClick={start}>Jogar</button>
+    ) : status === 'over' ? (
+      <>
+        <p className="game-over">Nave atingida · {score} pts</p>
+        <button className="game-start" onClick={start}>Jogar de novo</button>
+      </>
+    ) : null;
 
   return (
-    <div className="astro-container">
-      <h2>Astro Dodge</h2>
-      <canvas ref={canvasRef}></canvas>
-      <p>Score: {score} | High Score: {highScore}</p>
-      {!isPlaying && (
-        <button onClick={() => setIsPlaying(true)} className="start-btn">
-          Start
-        </button>
-      )}
-    </div>
+    <GameFrame file="astro_dodge.ts" hint="Setas, mouse ou dedo" score={score} best={best} overlay={overlay}>
+      <canvas
+        ref={canvasRef}
+        className="game-canvas touch-none"
+        tabIndex={0}
+        aria-label="Jogo Astro Dodge"
+        onPointerMove={onPointer}
+        onPointerDown={onPointer}
+      />
+    </GameFrame>
   );
 };
 

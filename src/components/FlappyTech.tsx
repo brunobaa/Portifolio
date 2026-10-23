@@ -1,106 +1,170 @@
-import { useEffect, useRef, useState } from 'react';
-import './FlappyTech.css';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import GameFrame from './GameFrame';
+import { loadBest, saveBest, setupCanvas } from './gameUtils';
+
+const W = 300;
+const H = 400;
+const BIRD_X = 70;
+const BIRD = 18;
+const PIPE_W = 46;
+const GAP = 125;
+const SPEED = 2.3;
+const GRAVITY = 0.42;
+const JUMP = -7.2;
+const SPACING = 170;
+const BEST_KEY = 'flappyBest';
+
+type Pipe = { x: number; gapY: number; passed: boolean };
+type Status = 'idle' | 'playing' | 'over';
+
+const newPipe = (x: number): Pipe => ({ x, gapY: 60 + Math.random() * (H - GAP - 120), passed: false });
 
 const FlappyTech = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bird = useRef({ y: H / 2, v: 0 });
+  const pipes = useRef<Pipe[]>([]);
+  const scoreRef = useRef(0);
+  const [status, setStatus] = useState<Status>('idle');
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(
-    Number(localStorage.getItem('highScore')) || 0
-  );
-  let birdY = 150;
-  let velocity = 0;
-  const gravity = 0.6;
-  const jump = -9;
-  let pipes = [{ x: 300, height: Math.random() * 200 + 50 }];
+  const [best, setBest] = useState(() => loadBest(BEST_KEY));
 
-  useEffect(() => {
-    const canvas = canvasRef.current as HTMLCanvasElement;
-    if (!canvas) return;
+  const draw = useCallback((ctx: CanvasRenderingContext2D) => {
+    ctx.clearRect(0, 0, W, H);
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    // grade de fundo
+    ctx.strokeStyle = 'rgba(148,163,184,0.07)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= W; x += 25) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for (let y = 0; y <= H; y += 25) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
 
-    canvas.width = 300;
-    canvas.height = 400;
+    // canos
+    pipes.current.forEach((p) => {
+      const grad = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
+      grad.addColorStop(0, '#1d4ed8');
+      grad.addColorStop(1, '#3b82f6');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(p.x, -10, PIPE_W, p.gapY + 10, 6);
+      ctx.roundRect(p.x, p.gapY + GAP, PIPE_W, H - p.gapY - GAP + 10, 6);
+      ctx.fill();
+    });
 
-    const drawBird = () => {
-      ctx.fillStyle = "#00ff00";
-      ctx.fillRect(50, birdY, 20, 20);
-    };
+    // "pássaro"
+    ctx.save();
+    ctx.shadowColor = '#22d3ee';
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = '#22d3ee';
+    ctx.beginPath();
+    ctx.roundRect(BIRD_X, bird.current.y, BIRD, BIRD, 5);
+    ctx.fill();
+    ctx.restore();
+  }, []);
 
-    const drawPipes = () => {
-      ctx.fillStyle = "#ff0000";
-      pipes.forEach((pipe) => {
-        ctx.fillRect(pipe.x, 0, 30, pipe.height);
-        ctx.fillRect(pipe.x, pipe.height + 100, 30, canvas.height);
-      });
-    };
-
-    const drawScore = () => {
-      ctx.fillStyle = "#fff";
-      ctx.font = "16px Arial";
-      ctx.fillText(`Score: ${score} | High Score: ${highScore}`, 10, 20);
-    };
-
-    const checkCollision = () => {
-      pipes.forEach((pipe) => {
-        if (
-          (50 < pipe.x + 30 && 50 + 20 > pipe.x && birdY < pipe.height) ||
-          (50 < pipe.x + 30 && 50 + 20 > pipe.x && birdY + 20 > pipe.height + 100)
-        ) {
-          setIsPlaying(false);
-          setScore(0); // Resetar pontuação ao colidir
-        }
-      });
-    };
-
-    const update = () => {
-      if (!ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      velocity += gravity;
-      birdY += velocity;
-      pipes.forEach((pipe) => (pipe.x -= 2));
-      if (pipes[0].x < -30) {
-        pipes.shift();
-        pipes.push({ x: canvas.width, height: Math.random() * 200 + 50 });
-        setScore((prevScore) => {
-          const newScore = prevScore + 1;
-          if (newScore > highScore) {
-            setHighScore(newScore);
-            localStorage.setItem('highScore', newScore.toString());
-          }
-          return newScore;
-        });
-      }
-      drawBird();
-      drawPipes();
-      drawScore();
-      checkCollision();
-      if (birdY > canvas.height || birdY < 0) {
-        setIsPlaying(false);
-        setScore(0); 
-      }
-    };
-
-    let interval: number;
-    if (isPlaying) interval = setInterval(update, 30);
-    return () => clearInterval(interval);
-  }, [isPlaying, score, highScore]);
-
-  const handleJump = () => {
-    velocity = jump;
+  const reset = () => {
+    bird.current = { y: H / 2, v: 0 };
+    pipes.current = [newPipe(W + 40), newPipe(W + 40 + SPACING)];
+    scoreRef.current = 0;
+    setScore(0);
   };
 
+  const flap = () => {
+    if (status !== 'playing') {
+      reset();
+      setStatus('playing');
+    }
+    bird.current.v = JUMP;
+  };
+
+  // Desenha o estado inicial
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = setupCanvas(canvas, W, H);
+    if (!ctx) return;
+    if (pipes.current.length === 0) pipes.current = [newPipe(W + 40)];
+    draw(ctx);
+  }, [draw]);
+
+  // Laço do jogo
+  useEffect(() => {
+    if (status !== 'playing') return;
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx) return;
+
+    let frame = 0;
+    let last = performance.now();
+
+    const tick = (now: number) => {
+      const k = Math.min((now - last) / 16.67, 3);
+      last = now;
+      const b = bird.current;
+      b.v += GRAVITY * k;
+      b.y += b.v * k;
+
+      pipes.current.forEach((p) => (p.x -= SPEED * k));
+      if (pipes.current[0].x < -PIPE_W) pipes.current.shift();
+      const lastPipe = pipes.current[pipes.current.length - 1];
+      if (lastPipe.x < W - SPACING) pipes.current.push(newPipe(lastPipe.x + SPACING));
+
+      let hit = b.y < 0 || b.y + BIRD > H;
+      pipes.current.forEach((p) => {
+        const overlapX = BIRD_X + BIRD > p.x && BIRD_X < p.x + PIPE_W;
+        if (overlapX && (b.y < p.gapY || b.y + BIRD > p.gapY + GAP)) hit = true;
+        if (!p.passed && p.x + PIPE_W < BIRD_X) {
+          p.passed = true;
+          scoreRef.current += 1;
+          setScore(scoreRef.current);
+        }
+      });
+
+      draw(ctx);
+
+      if (hit) {
+        setStatus('over');
+        setBest((prev) => {
+          const next = Math.max(prev, scoreRef.current);
+          saveBest(BEST_KEY, next);
+          return next;
+        });
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [status, draw]);
+
+  const overlay =
+    status === 'idle' ? (
+      <button className="game-start" onClick={flap}>Jogar</button>
+    ) : status === 'over' ? (
+      <>
+        <p className="game-over">Game over · {score} pts</p>
+        <button className="game-start" onClick={flap}>Jogar de novo</button>
+      </>
+    ) : null;
+
   return (
-    <div className="flappy-container" onClick={handleJump}>
-      <h2>Flappy Tech</h2>
-      <canvas ref={canvasRef}></canvas>
-      <p>Score: {score} | High Score: {highScore}</p>
-      {!isPlaying && (
-        <button onClick={() => setIsPlaying(true)} className="start-btn">Start</button>
-      )}
-    </div>
+    <GameFrame file="flappy_tech.ts" hint="Clique ou espaço" score={score} best={best} overlay={overlay}>
+      <canvas
+        ref={canvasRef}
+        className="game-canvas"
+        tabIndex={0}
+        aria-label="Jogo Flappy Tech"
+        onPointerDown={() => status === 'playing' && flap()}
+        onKeyDown={(e) => {
+          if (e.code === 'Space') {
+            e.preventDefault();
+            flap();
+          }
+        }}
+      />
+    </GameFrame>
   );
 };
 

@@ -1,0 +1,62 @@
+.education-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.education-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.icon-box {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: var(--accent-2);
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.education-card h3 {
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.education-institution {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+.language-list {
+  list-style: none;
+  width: 100%;
+  display: grid;
+  gap: 8px;
+}
+
+.language-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--border);
+  font-size: 0.95rem;
+}
+
+.language-list li:last-child {
+  border-bottom: none;
+}
+
+.language-level {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  text-align: right;
+}
