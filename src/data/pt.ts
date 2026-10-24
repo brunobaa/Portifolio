@@ -44,7 +44,7 @@ export const pt: Content = {
     ],
     contactCta: "Fale comigo",
     photoAlt: "Foto de Bruno Barbosa Andrade",
-    terminalRole: "estagiário @ SJCDH",
+    terminalLines: ["Bruno Barbosa Andrade", "Estagiário de TI @ SJCDH", "Ciência da Computação @ PUCRS"],
   },
 
   experience: {

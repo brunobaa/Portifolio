@@ -42,7 +42,7 @@ export const en: Content = {
     ],
     contactCta: "Get in touch",
     photoAlt: "Photo of Bruno Barbosa Andrade",
-    terminalRole: "intern @ SJCDH",
+    terminalLines: ["Bruno Barbosa Andrade", "IT Intern @ SJCDH", "Computer Science @ PUCRS"],
   },
 
   experience: {

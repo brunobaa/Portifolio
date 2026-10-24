@@ -219,6 +219,11 @@
   color: var(--text);
 }
 
+.t-line {
+  display: block;
+  white-space: nowrap;
+}
+
 .t-muted {
   color: var(--text-subtle);
 }

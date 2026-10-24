@@ -99,10 +99,14 @@ const Hero = () => {
               <span /><span /><span />
             </div>
             <code>
-              <span className="t-muted">$</span> whoami<br />
-              <span className="t-accent">bruno</span> · {h.terminalRole}<br />
-              <span className="t-muted">$</span> location<br />
-              <FaMapMarkerAlt className="t-pin" /> {h.location}
+              {h.terminalLines.map((line) => (
+                <span key={line} className="t-line">
+                  <span className="t-muted">$</span> {line}
+                </span>
+              ))}
+              <span className="t-line">
+                <FaMapMarkerAlt className="t-pin" /> {h.location}
+              </span>
             </code>
           </motion.div>
         </motion.div>

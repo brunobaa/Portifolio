@@ -52,7 +52,8 @@ export type Content = {
     stats: { value: string; label: string; href: string }[];
     contactCta: string;
     photoAlt: string;
-    terminalRole: string;
+    // Linhas do mini-terminal ao lado da foto, cada uma com "$" na frente
+    terminalLines: string[];
   };
   experience: {
     label: string;
