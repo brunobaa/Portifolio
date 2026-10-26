@@ -62,7 +62,7 @@ export const en: Content = {
           "Supporting state government systems: MinhaProcergs, SOE, GCE, SEI, PROA, SIS and FPE.",
           "Maintaining computers, printers and peripherals; installing and configuring VoIP phones.",
           "Containing viruses and malware, isolating compromised machines and restoring the environment.",
-          "Windows: OS installs and reinstalls, workstation setup, drivers, updates and user profiles; Windows 11 upgrades, including enabling TPM 2.0 through the Registry on officially unsupported machines.",
+          "Windows: OS installs and reinstalls, workstation setup, drivers, updates and user profiles; Windows 11 upgrades and maintenance of built-in Windows tools and services.",
           "Networking: configuring routers and switches, creating subnets and building racks to bring internet to Youth Centers.",
           "Automating routines and systems to reduce the team's manual work.",
         ],

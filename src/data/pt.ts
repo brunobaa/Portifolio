@@ -64,7 +64,7 @@ export const pt: Content = {
           "Suporte aos sistemas do Estado: MinhaProcergs, SOE, GCE, SEI, PROA, SIS e FPE.",
           "Manutenção de computadores, impressoras e periféricos; instalação e configuração de telefonia VoIP.",
           "Contenção de vírus e malware, isolando máquinas comprometidas e recuperando o ambiente.",
-          "Windows: formatação e instalação do sistema, configuração de estações de trabalho, drivers, atualizações e perfis de usuário; migração para Windows 11, incluindo a habilitação de TPM 2.0 via Registro em máquinas sem suporte oficial.",
+          "Windows: formatação e instalação do sistema, configuração de estações de trabalho, drivers, atualizações e perfis de usuário; migração para Windows 11 e manutenção de sistemas nativos do Windows.",
           "Redes: configuração de roteadores e switches, criação de sub-redes e montagem de racks para levar internet aos Centros da Juventude.",
           "Automação de rotinas e sistemas para reduzir trabalho manual da equipe.",
         ],
