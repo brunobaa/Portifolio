@@ -123,13 +123,16 @@
   position: relative;
   justify-self: center;
   width: min(340px, 100%);
-  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
 }
 
 .photo-ring {
   position: relative;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   border-radius: 50%;
   padding: 4px;
   isolation: isolate;
@@ -160,20 +163,22 @@
   }
 }
 
+/* Posição absoluta para a foto não esticar o círculo */
 .photo-ring img {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 4px;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid var(--bg);
   display: block;
 }
 
+/* Fica abaixo da foto, sem cobrir o rosto */
 .hero-terminal {
-  position: absolute;
-  left: -40px;
-  bottom: -10px;
-  min-width: 230px;
+  position: relative;
+  min-width: 260px;
   border-radius: 10px;
   border: 1px solid var(--border-strong);
   background: rgba(12, 19, 34, 0.9);
@@ -304,11 +309,8 @@
   }
 
   .hero-terminal {
-    left: auto;
-    right: -30%;
-    bottom: -16px;
-    min-width: 200px;
-    font-size: 0.7rem;
+    min-width: 240px;
+    font-size: 0.74rem;
   }
 
   .hero-stats {
@@ -320,10 +322,6 @@
 @media (max-width: 520px) {
   .hero-highlights {
     grid-template-columns: 1fr;
-  }
-
-  .hero-terminal {
-    display: none;
   }
 
   .hero-actions .btn {
