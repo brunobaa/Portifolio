@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import { FaGraduationCap, FaNetworkWired, FaLanguage } from "react-icons/fa";
+import { FaGraduationCap, FaNetworkWired, FaLaptopCode, FaLanguage } from "react-icons/fa";
 import { useLanguage } from "../i18n/useLanguage";
 import { SectionHeading } from './ui';
 import { fadeUp, stagger } from './motion';
 import "./Education.css";
 
 // Ícone de cada item de `education`, na mesma ordem
-const icons = [FaGraduationCap, FaNetworkWired];
+const icons = [FaGraduationCap, FaNetworkWired, FaLaptopCode];
 
 const Education = () => {
   const { t } = useLanguage();
